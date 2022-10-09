@@ -2,18 +2,18 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import {Link} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {SIGN_IN_PAGE} from "@utils/urls";
-import {SubmitHandler, useForm} from "react-hook-form";
+import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {signUpSchema} from "@utils/validations";
+import FormField from "@components/FormField";
 
 const theme = createTheme();
 
@@ -24,7 +24,7 @@ interface IFormInput {
 }
 
 export default function SignUp() {
-    const {register, handleSubmit, formState: { errors, isValid, touchedFields} } = useForm<IFormInput>({
+    const form = useForm<IFormInput>({
         mode: 'all',
         resolver: yupResolver(signUpSchema)
     });
@@ -36,7 +36,7 @@ export default function SignUp() {
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <Box
                     sx={{
                         marginTop: 8,
@@ -45,58 +45,39 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
+                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit(signUp)} sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    {...register('username')}
-                                    autoComplete="given-name"
-                                    required
-                                    fullWidth
-                                    id="username"
+                    <Box component="form" noValidate onSubmit={form.handleSubmit(signUp)} sx={{mt: 3}}>
+                        <FormProvider {...form}>
+                            <>
+                                <FormField
+                                    name="username"
                                     label="Username"
-                                    autoFocus
-                                    error={touchedFields.username && !!errors.username}
-                                    helperText={touchedFields.username && errors.username?.message}
+                                    autoFocus={true}
                                 />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    {...register('email')}
-                                    autoComplete="given-name"
-                                    required
-                                    fullWidth
-                                    id="email"
+
+                                <FormField
+                                    name="email"
                                     label="Email"
-                                    error={touchedFields.email && !!errors.email}
-                                    helperText={touchedFields.email && errors.email?.message}
                                 />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    {...register('password')}
-                                    autoComplete="given-name"
-                                    required
-                                    fullWidth
-                                    id="password"
+
+                                <FormField
+                                    name="password"
                                     label="Password"
-                                    error={touchedFields.password && !!errors.password}
-                                    helperText={touchedFields.password && errors.password?.message}
+                                    type="password"
                                 />
-                            </Grid>
-                        </Grid>
+                            </>
+                        </FormProvider>
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            disabled={!isValid}
+                            sx={{mt: 3, mb: 2}}
+                            disabled={!form.formState.isValid}
                         >
                             Sign Up
                         </Button>

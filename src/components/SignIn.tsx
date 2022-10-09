@@ -12,9 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {SubmitHandler, useForm} from "react-hook-form";
+import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {signInSchema} from "@utils/validations";
+import FormField from "@components/FormField";
 
 const theme = createTheme();
 
@@ -25,7 +26,7 @@ interface IFormInput {
 
 export default function SignIn() {
 
-    const {register, handleSubmit, formState: { errors, isValid, touchedFields} } = useForm<IFormInput>({
+    const form = useForm<IFormInput>({
         mode: 'all',
         resolver: yupResolver(signInSchema)
     });
@@ -52,33 +53,21 @@ export default function SignIn() {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit(signIn)} noValidate sx={{ mt: 1 }}>
-                        <TextField
-                            {...register('email')}
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                            error={touchedFields.email && !!errors.email}
-                            helperText={touchedFields.email && errors.email?.message}
-                        />
-                        <TextField
-                            {...register('password')}
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            error={touchedFields.password && !!errors.password}
-                            helperText={touchedFields.password && errors.password?.message}
-                        />
+                    <Box component="form" onSubmit={form.handleSubmit(signIn)} noValidate sx={{ mt: 1 }}>
+                        <FormProvider {...form}>
+                            <>
+                                <FormField
+                                    name="email"
+                                    label="Email Address"
+                                    autoFocus={true}
+                                />
+                                <FormField
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                />
+                            </>
+                        </FormProvider>
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
@@ -88,7 +77,7 @@ export default function SignIn() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
-                            disabled={!isValid}
+                            disabled={!form.formState.isValid}
                         >
                             Sign In
                         </Button>
