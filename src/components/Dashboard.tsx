@@ -13,13 +13,11 @@ import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {mainListItems, secondaryListItems} from "@components/ListItems";
-import Pages from "@components/Pages";
 import Footer from "@components/Footer";
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import {Link} from "react-router-dom";
-import {SIGN_IN_PAGE, SIGN_UP_PAGE} from "@helpers/routes";
 import {useLocation} from "react-router-dom";
+import {SIGN_IN_PAGE, SIGN_UP_PAGE} from "@utils/urls";
+import Pages from "@components/Pages";
 
 const drawerWidth: number = 240;
 

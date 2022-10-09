@@ -1,36 +1,26 @@
-import React from 'react';
-import {Routes, Route, Navigate,} from "react-router-dom";
-import {HOME_PAGE, privateRoutes, publicRoutes, SIGN_IN_PAGE} from "@helpers/routes";
+import React, {memo} from 'react';
+import {Navigate, useRoutes} from 'react-router-dom';
+import {HOME_PAGE, SIGN_IN_PAGE, SIGN_UP_PAGE} from "@utils/urls";
+import SignIn from "@components/SignIn";
+import SignUp from "@components/SignUp";
+import Home from "@components/Home";
 
-const Pages = () => {
+const Pages = memo(() => {
 
     const isAuth = false
 
-    return (
-        <Routes>
-            {
-                isAuth
-                    ? privateRoutes.map(({path, element}) => {
-                        return <Route
-                            key={path}
-                            path={path}
-                            element={element}
-                        />
-                    })
-                    : publicRoutes.map(({path, element}) => {
-                        return <Route
-                            key={path}
-                            path={path}
-                            element={element}
-                        />
-                    })
-            }
-            <Route
-                path={'*'}
-                element={<Navigate to={isAuth ? HOME_PAGE : SIGN_IN_PAGE}/>}
-            />
-        </Routes>
-    );
-};
+    const publicPages = [
+        {path: SIGN_IN_PAGE, element: <SignIn/>},
+        {path: SIGN_UP_PAGE, element: <SignUp/>,},
+        {path: '*', element: <Navigate to={SIGN_IN_PAGE} replace={true}/>}
+    ]
 
-export default Pages;
+    const privatePages = [
+        {path: HOME_PAGE, element: <Home/>,},
+        {path: '*', element: <Navigate to={HOME_PAGE} replace={true}/>}
+    ]
+
+    return useRoutes(isAuth ? privatePages : publicPages)
+});
+
+export default Pages

@@ -3,26 +3,34 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import {Link} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {SIGN_IN_PAGE} from "@utils/urls";
+import {SubmitHandler, useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {signUpSchema} from "@utils/validations";
 
 const theme = createTheme();
 
+interface IFormInput {
+    username: string;
+    email: string;
+    password: string
+}
+
 export default function SignUp() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+    const {register, handleSubmit, formState: { errors, isValid, touchedFields} } = useForm<IFormInput>({
+        mode: 'all',
+        resolver: yupResolver(signUpSchema)
+    });
+
+    const signUp: SubmitHandler<IFormInput> = (data) => {
+        console.log(data);
     };
 
     return (
@@ -43,54 +51,43 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit(signUp)} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                                 <TextField
+                                    {...register('username')}
                                     autoComplete="given-name"
-                                    name="firstName"
                                     required
                                     fullWidth
-                                    id="firstName"
-                                    label="First Name"
+                                    id="username"
+                                    label="Username"
                                     autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
+                                    error={touchedFields.username && !!errors.username}
+                                    helperText={touchedFields.username && errors.username?.message}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
+                                    {...register('email')}
+                                    autoComplete="given-name"
                                     required
                                     fullWidth
                                     id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
+                                    label="Email"
+                                    error={touchedFields.email && !!errors.email}
+                                    helperText={touchedFields.email && errors.email?.message}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
+                                    {...register('password')}
+                                    autoComplete="given-name"
                                     required
                                     fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
                                     id="password"
-                                    autoComplete="new-password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                    label="Password"
+                                    error={touchedFields.password && !!errors.password}
+                                    helperText={touchedFields.password && errors.password?.message}
                                 />
                             </Grid>
                         </Grid>
@@ -99,12 +96,13 @@ export default function SignUp() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            disabled={!isValid}
                         >
                             Sign Up
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link to={SIGN_IN_PAGE}>
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
