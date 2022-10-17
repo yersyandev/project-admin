@@ -14,6 +14,8 @@ import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {signUpSchema} from "@utils/validations";
 import FormField from "@components/FormField";
+import {useAppDispatch} from "@hooks/redux";
+import {registration} from "@redux/reducers/UserSlice";
 
 const theme = createTheme();
 
@@ -24,13 +26,17 @@ interface IFormInput {
 }
 
 export default function SignUp() {
+
+    const dispatch = useAppDispatch()
+
     const form = useForm<IFormInput>({
         mode: 'all',
         resolver: yupResolver(signUpSchema)
     });
 
     const signUp: SubmitHandler<IFormInput> = (data) => {
-        console.log(data);
+        // @ts-ignore
+        dispatch(registration(data))
     };
 
     return (

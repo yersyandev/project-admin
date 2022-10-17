@@ -9,38 +9,36 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import {HOME_PAGE, USERS_PAGE} from "@utils/urls";
+import {Link} from "react-router-dom";
 
 export const mainListItems = (
     <React.Fragment>
+        <Link to={HOME_PAGE}>
+            <ListItemButton>
+                <ListItemIcon>
+                    <DashboardIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Dashboard"/>
+            </ListItemButton>
+        </Link>
         <ListItemButton>
             <ListItemIcon>
-                <DashboardIcon />
+                <PeopleIcon/>
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
+            <ListItemText primary="Customers"/>
         </ListItemButton>
         <ListItemButton>
             <ListItemIcon>
-                <ShoppingCartIcon />
+                <BarChartIcon/>
             </ListItemIcon>
-            <ListItemText primary="Orders" />
+            <ListItemText primary="Reports"/>
         </ListItemButton>
         <ListItemButton>
             <ListItemIcon>
-                <PeopleIcon />
+                <LayersIcon/>
             </ListItemIcon>
-            <ListItemText primary="Customers" />
-        </ListItemButton>
-        <ListItemButton>
-            <ListItemIcon>
-                <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Reports" />
-        </ListItemButton>
-        <ListItemButton>
-            <ListItemIcon>
-                <LayersIcon />
-            </ListItemIcon>
-            <ListItemText primary="Integrations" />
+            <ListItemText primary="Integrations"/>
         </ListItemButton>
     </React.Fragment>
 );
@@ -50,23 +48,25 @@ export const secondaryListItems = (
         <ListSubheader component="div" inset>
             Saved reports
         </ListSubheader>
+        <Link to={USERS_PAGE}>
+            <ListItemButton>
+                <ListItemIcon>
+                    <PeopleIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Users"/>
+            </ListItemButton>
+        </Link>
         <ListItemButton>
             <ListItemIcon>
-                <AssignmentIcon />
+                <AssignmentIcon/>
             </ListItemIcon>
-            <ListItemText primary="Current month" />
+            <ListItemText primary="Last quarter"/>
         </ListItemButton>
         <ListItemButton>
             <ListItemIcon>
-                <AssignmentIcon />
+                <AssignmentIcon/>
             </ListItemIcon>
-            <ListItemText primary="Last quarter" />
-        </ListItemButton>
-        <ListItemButton>
-            <ListItemIcon>
-                <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Year-end sale" />
+            <ListItemText primary="Year-end sale"/>
         </ListItemButton>
     </React.Fragment>
 );

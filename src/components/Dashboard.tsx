@@ -18,6 +18,9 @@ import {Link} from "react-router-dom";
 import {useLocation} from "react-router-dom";
 import {SIGN_IN_PAGE, SIGN_UP_PAGE} from "@utils/urls";
 import Pages from "@components/Pages";
+import {useAppDispatch, useAppSelector} from "@hooks/redux";
+import {logout} from "@redux/reducers/UserSlice";
+import Button from '@mui/material/Button';
 
 const drawerWidth: number = 240;
 
@@ -72,12 +75,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function Dashboard() {
+
+    const dispatch = useAppDispatch()
+    const {isAuth, user, isLoading} = useAppSelector(state => state.userReducer)
+
     const {pathname} = useLocation()
 
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    if (isLoading) {
+        return <Box>Loading...</Box>
+    }
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -108,12 +119,18 @@ function Dashboard() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Dashboard
+                            Admin ( {user.username} )
                         </Typography>
                         <Box>
-                            <Link to={pathname === SIGN_IN_PAGE ? SIGN_UP_PAGE : SIGN_IN_PAGE}>
-                                {pathname === SIGN_IN_PAGE ? "Sign Up" : "Sign In"}
-                            </Link>
+                            {
+                                isAuth
+                                    ? <Button variant="contained" onClick={() => dispatch(logout())}>
+                                        Logout
+                                    </Button>
+                                    : <Link to={pathname === SIGN_IN_PAGE ? SIGN_UP_PAGE : SIGN_IN_PAGE}>
+                                        {pathname === SIGN_IN_PAGE ? "Sign Up" : "Sign In"}
+                                    </Link>
+                            }
                         </Box>
                     </Toolbar>
                 </AppBar>

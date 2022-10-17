@@ -5,7 +5,9 @@
       "@components/*" : ["./components/*"],
       "@utils/*" : ["./utils/*"],
       "@api/*" : ["./api/*"],
-      "@redux/*" : ["./redux/*"]
+      "@redux/*" : ["./redux/*"],
+      "@hooks/*" : ["./hooks/*"],
+      "@models/*" : ["./models/*"]
     }
   }
 }

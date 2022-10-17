@@ -2,7 +2,6 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
@@ -16,6 +15,8 @@ import {FormProvider, SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {signInSchema} from "@utils/validations";
 import FormField from "@components/FormField";
+import {useAppDispatch} from "@hooks/redux";
+import {login} from "@redux/reducers/UserSlice";
 
 const theme = createTheme();
 
@@ -26,13 +27,16 @@ interface IFormInput {
 
 export default function SignIn() {
 
+    const dispatch = useAppDispatch()
+
     const form = useForm<IFormInput>({
         mode: 'all',
         resolver: yupResolver(signInSchema)
     });
 
     const signIn: SubmitHandler<IFormInput> = (data) => {
-        console.log(data);
+        // @ts-ignore
+        dispatch(login(data))
     };
 
     return (
